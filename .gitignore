@@ -1,0 +1,19 @@
+# ===== 敏感配置（含数据库密码，绝对不能提交）=====
+.env
+.env.*
+!.env.example
+
+# ===== Composer 依赖（可 composer install 重建）=====
+vendor/
+
+# ===== 运行时缓存 =====
+runtime/
+
+# ===== 日志 =====
+*.log
+
+# ===== 系统和编辑器 =====
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
