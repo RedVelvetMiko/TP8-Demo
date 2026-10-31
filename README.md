@@ -1,77 +1,150 @@
-![](https://www.thinkphp.cn/uploads/images/20230630/300c856765af4d8ae758c503185f8739.png)
+# TP8 Demo
 
-ThinkPHP 8
-===============
+ThinkPHP 8 入门练习项目，用于熟悉路由、中间件、链式查询等基础用法。项目使用 Git 做版本管理，同时托管到 GitHub 和 Gitee。
 
-## 特性
+## 技术栈
 
-* 基于PHP`8.0+`重构
-* 升级`PSR`依赖
-* 依赖`think-orm`3.0+版本
-* 全新的`think-dumper`服务，支持远程调试
-* 支持`6.0`/`6.1`无缝升级
+- PHP 8.2
+- ThinkPHP 8
+- MySQL
+- Composer
 
-> ThinkPHP8的运行环境要求PHP8.0+
+## 目录结构
 
-现在开始，你可以使用官方提供的[ThinkChat](https://chat.topthink.com/)，让你在学习ThinkPHP的旅途中享受私人AI助理服务！
+```text
+tp8-app/
+├── app/                # 应用代码（控制器、模型、中间件）
+├── config/             # 配置文件
+├── public/             # Web 入口目录
+│   ├── index.php       # 入口文件
+│   └── .htaccess       # Apache 重写规则（需提交）
+├── runtime/            # 运行时缓存（不提交）
+├── vendor/             # Composer 依赖（不提交，composer install 重建）
+├── .env                # 本地环境配置（含数据库密码，不提交）
+├── .gitignore
+└── composer.json
+```
 
-![](https://www.topthink.com/uploads/assistant/20230630/4d1a3f0ad2958b49bb8189b7ef824cb0.png)
+## 环境要求
 
-ThinkPHP生态服务由[顶想云](https://www.topthink.com)（TOPThink Cloud）提供，为生态提供专业的开发者服务和价值之选。
+- PHP >= 8.0
+- Composer
+- MySQL 5.7+ / 8.0+
+- Apache（phpStudy）或 PHP 内置服务器
 
-## 文档
+## 本地运行
 
-[完全开发手册](https://doc.thinkphp.cn)
+### 1. 安装依赖
 
+```bash
+composer install
+```
 
-## 赞助
+### 2. 配置环境变量
 
-全新的[赞助计划](https://www.thinkphp.cn/sponsor)可以让你通过我们的网站、手册、欢迎页及GIT仓库获得巨大曝光，同时提升企业的品牌声誉，也更好保障ThinkPHP的可持续发展。
+复制 `.env.example` 为 `.env`（若无模板则手动创建），填入数据库信息：
 
-[![](https://www.thinkphp.cn/sponsor/special.svg)](https://www.thinkphp.cn/sponsor/special)
+```ini
+APP_DEBUG = true
 
-[![](https://www.thinkphp.cn/sponsor.svg)](https://www.thinkphp.cn/sponsor)
+[DATABASE]
+TYPE = mysql
+HOSTNAME = 127.0.0.1
+DATABASE = 你的库名
+USERNAME = 你的用户名
+PASSWORD = 你的密码
+HOSTPORT = 3306
+CHARSET = utf8mb4
+```
 
-## 安装
+> `.env` 含数据库密码，已加入 `.gitignore`，不会提交到仓库。
 
-~~~
-composer create-project topthink/think tp
-~~~
+### 3. 启动项目
 
-启动服务
+**方式一：PHP 内置开发服务器（推荐本地调试）**
 
-~~~
-cd tp
+```bash
 php think run
-~~~
+```
 
-然后就可以在浏览器中访问
+默认监听 `http://0.0.0.0:8000/`，文档根目录为 `public/`。指定端口：
 
-~~~
-http://localhost:8000
-~~~
+```bash
+php think run -p 8081
+```
 
-如果需要更新框架使用
-~~~
-composer update topthink/framework
-~~~
+> `php think run` 是 ThinkPHP 封装的 PHP 内置服务器，端口由命令参数决定（默认 8000），与 phpStudy 的 Apache/Nginx 是两套独立的服务器，互不影响。
 
-## 命名规范
+**方式二：phpStudy（Apache）**
 
-`ThinkPHP`遵循PSR-2命名规范和PSR-4自动加载规范。
+在 phpStudy 中新建站点，**网站根目录必须精确指向 `public/`**，例如：
 
-## 参与开发
+```text
+D:\Ex_Projects\TP8_test\tp8-app\public
+```
 
-直接提交PR或者Issue即可
+保存后重启 Apache，通过站点配置的端口访问。
 
-## 版权信息
+> 根目录指向 `public/` 是安全边界：`.env`、`app/`、`vendor/` 位于 `public/` 的上级目录，不会被 Web 直接访问。
 
-ThinkPHP遵循Apache2开源协议发布，并提供免费使用。
+## Git 托管
 
-本项目包含的第三方源码和二进制文件之版权信息另行标注。
+项目同时推送到两个远程仓库：
 
-版权所有Copyright © 2006-2024 by ThinkPHP (http://thinkphp.cn) All rights reserved。
+```bash
+# 查看远程配置
+git remote -v
 
-ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
+# 分别推送
+git push github main
+git push gitee main
+```
 
-更多细节参阅 [LICENSE.txt](LICENSE.txt)
+- GitHub：`git@github.com:RedVelvetMiko/TP8-Demo.git`
+- Gitee：`git@gitee.com:RedVelvetMiko/TP8-Demo.git`
+
+## 注意事项
+
+### `.gitignore` 关键规则
+
+```gitignore
+.env
+.env.*
+!.env.example
+vendor/
+runtime/
+*.log
+.idea/
+.vscode/
+```
+
+- `.env`：含数据库密码，**绝对不能提交**
+- `vendor/`：Composer 依赖，可 `composer install` 重建
+- `runtime/`：运行时缓存，换环境或换路径后应清空
+
+### `.htaccess` 被覆盖时的恢复
+
+phpStudy 修改站点根目录或启用伪静态时，可能覆盖 `public/.htaccess`。该文件已提交到 Git，被覆盖后可恢复：
+
+```bash
+git status                          # 确认 public/.htaccess 被修改
+git diff public/.htaccess           # 查看具体变化
+git restore public/.htaccess        # 恢复到最近一次提交的版本
+```
+
+> `.htaccess` 是路由重写规则，属于配置源码，不含敏感信息，应提交到仓库。备份文件（`.bak` / `.backup`）不提交，Git 历史本身就是备份。
+
+### 项目换位置后需要检查
+
+1. `vendor/` 是否随项目一起移动（漏了会报 `autoload.php` 找不到）
+2. 清空 `runtime/` 缓存（旧路径信息会残留）
+3. phpStudy 网站根目录是否同步指向新位置的 `public/`
+4. `.env` 中是否有写死的绝对路径需要修改
+
+## 学习记录
+
+- Git 基础：`init` / `status` / `add` / `commit` / `push` / `pull` / `branch` / `clone`
+- SSH 密钥配置，GitHub 与 Gitee 双平台托管
+- TP8 项目目录迁移与 phpStudy 站点根目录调整
+- `.htaccess` 路由规则与版本控制恢复
+- PHP 内置服务器（`php think run`）与 Apache 部署的区别
